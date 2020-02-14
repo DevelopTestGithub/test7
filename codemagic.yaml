@@ -1,0 +1,90 @@
+# Automatically generated on 2020-02-14 UTC from https://codemagic.io/app/5e45a36a54205523b7d4bb90/settings
+# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
+
+workflows:
+  default-workflow:
+    name: Default Workflow
+    environment:
+      vars:
+        BUILD_VERSION: 1${BUILD_NUMBER}BETA
+        APP_PASSWORD_ENV_VARIABLE: Josias4528
+      flutter: dev
+      xcode: latest
+    triggering:
+      events:
+        - tag
+      branch_patterns:
+        - pattern: '[dev]'
+          include: true
+          source: false
+    scripts:
+      - |
+        # set up debug keystore
+        rm -f ~/.android/debug.keystore
+        keytool -genkeypair \
+          -alias androiddebugkey \
+          -keypass android \
+          -keystore ~/.android/debug.keystore \
+          -storepass android \
+          -dname 'CN=Android Debug,O=Android,C=US' \
+          -keyalg 'RSA' \
+          -keysize 2048 \
+          -validity 10000
+      - |
+        # set up local properties
+        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
+      - flutter packages pub get
+      - flutter build apk --profile --build-name=1.0.${BUILD_NUMBER}
+      - |
+        Build failed :|
+        Step 5 script `Post-build script` exited with status code 127
+
+        #!/usr/bin/env sh
+         sudo apt install rename
+         set -e # exit on first failed commandset
+         set -x # print all executed commands to the log
+
+         if [ "$FCI_BUILD_STEP_STATUS" == "success" ]
+         then
+            echo "Find build artifacts"
+            apkPath=$(find build -name "*.apk" | head -1)
+            echo "Found apk at $apkPath"
+
+            if [[ -z ${apkPath} ]]
+            then
+                echo "No apks were found, skip publishing to App Center"
+            else
+                echo "Cambiar el nombre del apk con esa ruta $apkPath"
+                pwd
+                cd build/app/outputs/apk/
+                pwd
+                mkdir hello
+                ls -l
+                mv app.apk app1.apk
+                ls -l
+                mv profile/app-profile.apk profile/app1.apk
+                cd profile/
+                ls -l
+            fi
+         fi
+      - |
+        #!/usr/bin/env sh
+
+         set -e # exit on first failed commandset
+         set -x # print all executed commands to the log
+
+         if [ "$FCI_BUILD_STEP_STATUS" == "success" ]
+         then
+           new_version=v$BUILD_VERSION
+           git tag $new_version
+           git push "https://DevelopTestGithub:$APP_PASSWORD_ENV_VARIABLE@github.com/DevelopTestGithub/test7" --tags
+         fi
+    artifacts:
+      - build/app/outputs/apk/profile/${BUILD_VERSION}.apk
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - jipina_est@utmachala.edu.ec
