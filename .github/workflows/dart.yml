@@ -15,9 +15,9 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         flutter-version: 'dev'
-    - run: flutter pub get
-    - run: flutter test
-    - run: flutter build apk --profile --split-per-abi
+    - run: pub get
+    - run: test
+    - run: build apk --profile --split-per-abi
     - name: Create a Release APK
       uses: ncipollo/release-action@v1
       with:
