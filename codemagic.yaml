@@ -44,11 +44,8 @@ workflows:
             else
                 echo "Cambiar el nombre del apk con esa ruta $apkPath"
                 pwd
-                cd build/app/outputs/apk/
-                pwd
-                mkdir hello
                 ls -l
-                mv /Users/builder/clone/build/app/outputs/apk/profile/*.apk /Users/builder/clone/build/app/outputs/apk/profile/app1.apk 
+                mv build/app/outputs/apk/profile/app-profile.apk build/app/outputs/apk/profile/app1.apk 
             fi
          fi
       - |
