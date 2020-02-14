@@ -45,7 +45,7 @@ workflows:
                 echo "Cambiar el nombre del apk con esa ruta $apkPath"
                 pwd
                 ls -l
-                mv build/app/outputs/apk/profile/app-profile.apk build/app/outputs/apk/profile/app1.apk 
+                mv /Users/builder/clone/build/app/outputs/apk/profile/app-profile.apk /Users/builder/clone/build/app/outputs/apk/profile/app1.apk 
             fi
          fi
       - |
@@ -61,7 +61,7 @@ workflows:
            git push "https://DevelopTestGithub:$APP_PASSWORD_ENV_VARIABLE@github.com/DevelopTestGithub/test7" --tags
          fi
     artifacts:
-      - build/app/outputs/apk/profile/*.apk 
+      - /Users/builder/clone/build/app/outputs/apk/profile/*.apk 
       - build/**/outputs/**/*.aab
       - build/**/outputs/**/mapping.txt
       - flutter_drive.log
