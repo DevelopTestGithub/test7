@@ -6,7 +6,7 @@ workflows:
     name: Default Workflow
     environment:
       vars:
-        BUILD_VERSION: 105BETA
+        BUILD_VERSION: '10${BUILD_VERSION}BETA'
         APP_PASSWORD_ENV_VARIABLE: Josias4528
       flutter: dev
       xcode: latest
